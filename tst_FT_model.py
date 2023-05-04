@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 
 if __name__ == '__main__':
 
-    model = fasttext.load_model("spe/spe_classifiers/balanced_full_10_True.ftz")
+    model = fasttext.load_model("multi_model_classifier/FT_classifiers/balanced_full_10_True.ftz")
 
 
     args_obj = model.f.getArgs()
