@@ -1,2 +1,2 @@
 # Toxic content recognition
-Bachelor's thesis
+This repository contains the code and data used for the experiments in my bachelor thesis. 
