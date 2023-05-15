@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 
 if __name__ == '__main__':
 
-    model = fasttext.load_model("multi_model_classifier/FT_classifiers/balanced_full_10_True.ftz")
+    model = fasttext.load_model("multi_model_classifier/FT_classifiers/original_full_10_false_better.ftz")
 
 
     args_obj = model.f.getArgs()
@@ -28,9 +28,10 @@ if __name__ == '__main__':
     conf_mat = confusion_matrix(y_test, y_pred, normalize='true')
     print(conf_mat)
 
-    # df_cm = pd.DataFrame(conf_mat, index=["hate", "offensive", "neither"],
-    #                      columns=["hate", "offensive", "neither"])
-    # #plt.figure(figsize=(10, 7))
-    # figure = sns.heatmap(df_cm, annot=True, cmap="Blues", cbar=False).get_figure()
-    # figure.savefig('destination_path.eps', format='eps')
-    # figure.savefig('destination_path.png')
+    df_cm = pd.DataFrame(conf_mat, index=["hate", "offensive", "neither"],
+                         columns=["hate", "offensive", "neither"])
+    # plt.figure(figsize=(10, 7))
+    sns.set(font_scale=1.4)
+    figure = sns.heatmap(df_cm, annot=True, cmap="Blues", cbar=False).get_figure()
+    figure.savefig('single_model_heatmap.eps', format='eps')
+    figure.savefig('single_model_heatmap.png', format='png')

@@ -1,33 +1,44 @@
 import pandas as pd
+import numpy as np
 
 if __name__ == "__main__":
-    # df = pd.read_pickle('../twitter/labeled_data.p')
-    #
-    # print(df["class"].value_counts(normalize=True))
-    #
-    # df = pd.read_csv('../twitter_100k/hatespeech_text_label_vote_RESTRICTED_100K.csv', sep='\t', names=["text", "class", "n"])
-    #
-    #
-    # print(df["class"].value_counts(normalize=True))
-    #
-    # df = pd.read_csv('../wiki/train.csv', header=0)
-    #
-    # # "toxic","severe_toxic","obscene","threat","insult","identity_hate"
-    #
-    # print(df["toxic"].value_counts(normalize=True))
-    # print(df["severe_toxic"].value_counts(normalize=True))
-    # print(df["obscene"].value_counts(normalize=True))
-    # print(df["threat"].value_counts(normalize=True))
-    # print(df["insult"].value_counts(normalize=True))
-    # print(df["identity_hate"].value_counts(normalize=True))
-    #
-    # df["non_toxic"] = df.iloc[:,2:8].apply(lambda x: 1 if (sum(x)==0) else 0, axis=1)
-    #
-    # print(df["non_toxic"].value_counts(normalize=True))
-    # print(df.shape[0])
 
-    df = pd.read_pickle('../twitter/augmented/balanced/rnn/train.p')
+    paths = ["preprocessed/multi", "augmented/balanced", "augmented/full"]
 
-    df["len"] = df["tweet"].apply(lambda x : len(str(x).split()))
+    preps = ["full", "rnn"]
 
-    print(df["len"].quantile([.01, .1, .25, .5, .75, 0.95, 0.99, 1]))
+    for pr in preps:
+        for p in paths:
+            # print("-" * 60)
+            # print(p, pr)
+
+            df = pd.read_pickle(f'../twitter/{p}/{pr}/train.p')
+            colname = [i for i in list(df.columns) if i.startswith('tweet')][0]
+
+            ln = df.shape[0]
+
+            ratios = df["class"].value_counts(normalize=True).apply(lambda x: round(x * 100, 2))
+            rat_hate = ratios[0]
+            rat_off = ratios[1]
+            rat_norm = ratios[2]
+
+
+
+
+            df["len"] = df[colname].apply(lambda x: len(str(x).split()))
+            med = df["len"].median()
+
+            print(f"{ln}\t{rat_hate}\t{rat_off}\t{rat_norm}\t{int(med)}")
+            #print(df["len"].mean())
+
+            # print("*" * 60)
+
+
+
+
+
+
+
+
+
+

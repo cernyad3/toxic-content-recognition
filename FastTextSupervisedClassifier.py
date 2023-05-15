@@ -24,30 +24,32 @@ def df_to_FT_labels(df, outname, class_colname, text_colname):
             fout.write(s.replace('\n', ' ') + '\n')
 
 
-def df_to_RNNLM_labels(df, outname, class_colname, text_colname, is_test, enrich=False):
+def df_to_RNNLM_labels(df, outname, class_colname, text_colname, is_test, enrich=False, reverse=False):
     with open(outname, 'w', encoding='utf-8') as fout:
         for index, row in df.iterrows():
+            s = row[text_colname]
+
+            if reverse:
+                s_lst = s.split()
+                s_lst.reverse()
+                s = ' '.join(s_lst)
+
             ground_truth = "" if is_test else f' {row[class_colname]}'
-            s = f'{row[text_colname]} <eos>{ground_truth}'
+            s = f'{s} <eos>{ground_truth}'
             s = s.replace('\n', ' ')
 
             if enrich:
                 s_lst = s.split()
-
                 for i in range(5, len(s_lst), 6):
-
                     if len(s_lst) == 35 or i > (len(s_lst) - 2 ): # dont enrich too close to <eos>
                         break
-
                     s_lst.insert(i, ground_truth)
-
                 s = ' '.join(s_lst)
 
             fout.write(s + '\n')
 
 
 def split_df_dataset(df, ratio_val, ratio_test, text_colname, class_colname, save_path):
-    #df = pd.read_pickle('data/twitter/preprocessed/labeled_data.p')
 
     X = df[text_colname]
     y = df[class_colname]
@@ -98,96 +100,6 @@ def split_df_dataset(df, ratio_val, ratio_test, text_colname, class_colname, sav
     pd.to_pickle(df_valid, f"{save_path}/valid.p")
 
 
-if __name__ == '__main__':
-    #df = pd.read_csv('/mnt/c/Users/AdamC/Plocha/Skola/bachelors_thesis/data/wiki/preprocessed/train.csv')
-    #df_to_FT_labels(df, '/mnt/c/Users/AdamC/Plocha/Skola/bachelors_thesis/data/wiki/preprocessed/multi/FT_whole.txt',
-    #                ['toxic', 'severe_toxic', 'obscene', 'threat', 'insult', 'identity_hate', 'non_toxic'],
-    #                'comment_text')
-    #split_df_dataset(df, 0.1, 0.2, 'comment_text', ['toxic', 'severe_toxic', 'obscene', 'threat', 'insult', 'identity_hate', 'non_toxic'],
-    #                                              '/mnt/c/Users/AdamC/Plocha/Skola/bachelors_thesis/data/wiki/preprocessed/multi')
-
-    #model = fasttext.train_supervised(input='data/wiki/preprocessed/multi/FT_train_large.txt',
-    #                                  autotuneValidationFile='data/wiki/preprocessed/multi/FT_valid.txt', loss='ova')
-    #model.save_model('model/wiki/multi_kaggle.bin')
-
-
-    # model = fasttext.load_model(
-    #     '/mnt/c/Users/AdamC/Plocha/Skola/bachelors_thesis/model/wiki/wiki_small.ftz')
-    # df = pd.read_csv("submission1.csv")
-    #
-    # df1 = pd.read_csv("data/wiki/preprocessed/test_kaggle.csv")
-    #
-    # y_pred = pd.merge(df1, df, on="id")
-    #
-    # y_pred = y_pred.drop(columns=["id", "comment_text"])
-    # y_pred = y_pred.to_numpy()
-    #
-    # y_pred[y_pred.astype(float) >= 0.5] = 1
-    # y_pred[y_pred.astype(float) < 0.5] = 0
-    # y_pred = y_pred.astype(int)
-    #
-    # print(y_pred)
-    # print(y_pred.shape)
-    #
-    # y_true = pd.read_csv("data/wiki/ground_truth.csv")
-    # y_true = y_true.drop(columns=["id"])
-    # y_true = y_true.to_numpy()
-    #
-    # print(y_true)
-    # print(y_true.shape)
-    #
-    # print(classification_report(y_true, y_pred))
-    #
-    # y_true = np.c_[y_true, np.zeros(y_true.shape[0])]
-    # y_pred = np.c_[y_pred, np.zeros(y_pred.shape[0])]
-    #
-    # #print(y_true)
-    # #print(y_true[np.sum(y_true, axis=1) == 0, -1])
-    #
-    # y_true[np.sum(y_true, axis=1) == 0, -1] = 1
-    # y_pred[np.sum(y_pred, axis=1) == 0, -1] = 1
-    #
-    # print(y_pred)
-    # print(y_true)
-    #
-    #
-    # print(classification_report(y_true, y_pred))
-
-    # model = fasttext.load_model(
-    #     '/mnt/c/Users/AdamC/Plocha/Skola/bachelors_thesis/model/wiki/wiki_small.ftz')
-    #
-    # df = pd.read_csv('/mnt/c/Users/AdamC/Plocha/Skola/bachelors_thesis/data/wiki/preprocessed/test.csv')
-    #
-    # submission = pd.DataFrame(columns=["id", "toxic", "severe_toxic", "threat", "insult", "obscene", "identity_hate"])
-    #
-    # for index, row in df.iterrows():
-    #     predition = model.predict(str(row["comment_text"]).replace('\n', ' '), k=-1)
-    #     prob_dict = dict(zip(map(lambda x: x.split("__label__")[1], predition[0]), predition[1]))
-    #     submission.loc[len(submission.index)] = [row["id"], f'{prob_dict["toxic"]:.6f}',
-    #                                              f'{prob_dict["severe_toxic"]: .6f}', f'{prob_dict["obscene"]:.6f}',
-    #                                              f'{prob_dict["threat"]:.6f}', f'{prob_dict["insult"]:.6f}',
-    #                                              f'{prob_dict["identity_hate"]:.6f}']
-    #
-    # #submission.drop(columns=["comment_text"])
-    # submission.to_csv("submission.csv")
-    models = [
-        'model/twitter/twitter_small.ftz',
-        'model/twitter/small_new.ftz',
-        'model/twitter/small_augmented_balanced.ftz',
-        'model/twitter/small_augmented_full.ftz',
-        'model/twitter/small_augmented_balanced_new.ftz'
-        ]
-
-    for path in models:
-        print(path)
-        model = fasttext.load_model(path)
-
-        args_obj = model.f.getArgs()
-        for hparam in dir(args_obj):
-            if not hparam.startswith('__'):
-                print(f"{hparam} -> {getattr(args_obj, hparam)}")
-
-        print('-'*50)
 
 
 

@@ -7,11 +7,6 @@ from sklearn.metrics import confusion_matrix
 from sklearn.metrics import precision_recall_fscore_support
 from sklearn.metrics import accuracy_score
 
-# TODO zde připravit skript, který otestuje klasifikátory na FT klasifikaci / logreg
-
-# představa
-# 1. pro každý testovaný klasifikátor vyhodí classification report
-# 2. (možná moc na dlouho) otestuje všechny možné kombinace klasifikátorů
 
 
 if __name__ == '__main__':
@@ -76,4 +71,4 @@ if __name__ == '__main__':
 
     print(f"best F1 score: {best_f1}\n classifier name: {best_f1_classifier_name}")
 
-    df_out.to_excel("model/twitter/results.xlsx")
+    df_out.to_excel("model/twitter/results2.xlsx")

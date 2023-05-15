@@ -31,10 +31,10 @@ if __name__ == '__main__':
     train_sentences = train_df['tweet'].apply(lambda x: str(x).replace('\n', ' ')).to_numpy()
     test_sentences = test_df['tweet'].apply(lambda x: str(x).replace('\n', ' ')).to_numpy()
 
-    X_train = np.array(spe.embed_sentences(train_sentences))
+    X_train = np.array(sent_vectorizer.embed_sentences(train_sentences))
     y_train = train_df['class'].to_numpy().astype(int)
 
-    X_test = np.array(spe.embed_sentences(test_sentences))
+    X_test = np.array(sent_vectorizer.embed_sentences(test_sentences))
     y_test = test_df['class'].to_numpy().astype(int)
 
     print(X_train.shape)
@@ -59,12 +59,10 @@ if __name__ == '__main__':
 
     df_cm = pd.DataFrame(conf_mat, index=["hate", "offensive", "neither"],
                          columns=["hate", "offensive", "neither"])
-    plt.figure(figsize=(10, 7))
+    #plt.figure(figsize=(10, 7))
     figure = sns.heatmap(df_cm, annot=True, cmap="Blues", cbar=False).get_figure()
     figure.savefig('multi_model_heatmap.eps', format='eps')
-
-
-
+    figure.savefig('multi_model_heatmap.png', format='png')
 
 
 

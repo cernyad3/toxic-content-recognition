@@ -10,19 +10,20 @@ from sklearn.metrics import accuracy_score
 if __name__ == '__main__':
 
     model = fasttext.train_supervised(
-        input="data/twitter/augmented/full/full/FT_train.txt",
-        autotuneValidationFile="data/twitter/preprocessed/multi/full/FT_valid.txt",
+        input="data/twitter/augmented/balanced/full/FT_train.txt",
+        #autotuneValidationFile="data/twitter/preprocessed/multi/full/FT_valid.txt",
         #autotuneValidationFile="data/twitter/augmented/full/full//FT_valid.txt",
-        autotuneDuration=600,
+        #autotuneDuration=600,
         # autotuneModelSize="20M",
-        #epoch=10,
-        pretrainedVectors="model/unsupervised/wiki.simple.reduced_10.vec",
-        # bucket=1364184,
-        #minn=0,
-        #maxn=0,
-        #lr=0.05,
-        #wordNgrams=0,
+        epoch=1,
+        #pretrainedVectors="model/unsupervised/wiki.simple.reduced_10.vec",
+        bucket=1629546,
+        minn=3,
+        maxn=6,
+        lr=0.05,
+        wordNgrams=1,
         dim=10,
+
     )
     # save the model
     model.save_model("model/twitter/new_29_04/model.ftz")

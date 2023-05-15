@@ -26,7 +26,7 @@ def preprocess_tweet(tweet):
     parsed_text = re.sub(r'^RT\s', "", parsed_text)
 
     #parsed_text = re.sub('[^A-Za-z!?,.\'\s@]+', '', parsed_text)
-    #TODO solve case hello,world
+
     parsed_text = re.sub('[^A-Za-z\s]+', '', parsed_text)
 
     querywords = parsed_text.split()
