@@ -1,5 +1,5 @@
 import pandas as pd
-import FastTextSupervisedClassifier as fsc
+import data_utils as fsc
 
 from utils import preprocess_none
 from utils import preprocess_simple

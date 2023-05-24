@@ -1,5 +1,5 @@
 import pandas as pd
-import FastTextSupervisedClassifier
+import data_utils
 from sklearn.model_selection import train_test_split
 from utils import preprocess_none
 from utils import preprocess_simple
