@@ -42,10 +42,10 @@ if __name__ == '__main__':
             prep = "rnn" if o.startswith("rnn") else o
             test_df = pd.read_pickle(f"../twitter/preprocessed/multi/{prep}/test.p")
 
-            FastTextSupervisedClassifier.df_to_FT_labels(train, f"../twitter/augmented/{ao}/{o}/FT_train.txt",
+            data_utils.df_to_FT_labels(train, f"../twitter/augmented/{ao}/{o}/FT_train.txt",
                                                          "class",
                                                          "tweet")
-            FastTextSupervisedClassifier.df_to_FT_labels(valid_df, f"../twitter/augmented/{ao}/{o}/FT_valid.txt",
+            data_utils.df_to_FT_labels(valid_df, f"../twitter/augmented/{ao}/{o}/FT_valid.txt",
                                                          "class",
                                                          "tweet")
             enrich = False
@@ -57,10 +57,10 @@ if __name__ == '__main__':
             if o == "rnn_reverse":
                 reverse = True
 
-            FastTextSupervisedClassifier.df_to_RNNLM_labels(train, f"../twitter/augmented/{ao}/{o}/RNN_train.txt",
+            data_utils.df_to_RNNLM_labels(train, f"../twitter/augmented/{ao}/{o}/RNN_train.txt",
                                                             "class", "tweet", False, reverse=reverse, enrich=enrich)
 
-            FastTextSupervisedClassifier.df_to_RNNLM_labels(valid_df,
+            data_utils.df_to_RNNLM_labels(valid_df,
                                                             f"../twitter/augmented/{ao}/{o}/RNN_valid.txt",
                                                             "class", "tweet", True, reverse=reverse)
 
@@ -68,7 +68,7 @@ if __name__ == '__main__':
 
 
             colname = [i for i in list(test_df.columns) if i.startswith('tweet')][0]
-            FastTextSupervisedClassifier.df_to_RNNLM_labels(test_df, f"../twitter/augmented/{ao}/{o}/RNN_test.txt",
+            data_utils.df_to_RNNLM_labels(test_df, f"../twitter/augmented/{ao}/{o}/RNN_test.txt",
                                                         "class", colname, True, reverse=reverse)
 
             train.to_pickle(f"../twitter/augmented/{ao}/{o}/train.p")
